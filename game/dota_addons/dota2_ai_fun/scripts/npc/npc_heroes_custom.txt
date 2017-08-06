@@ -7,7 +7,7 @@
 #base "heroes\magic_dragon.txt"
 #base "heroes\mana_fiend.txt"
 #base "heroes\persuasive.txt"
-#base "heroes\ramza.txt"
+//#base "heroes\ramza.txt"
 #base "heroes\telekenetic_blob.txt"
 #base "heroes\terran_marine.txt"
 #base "heroes\void_demon.txt"

@@ -379,7 +379,7 @@ function RamzaSelectSecondarySkillListener() {
 		RamzaJob.SelectSecondarySkill()
 	};
 }
-
+/*
 function RamzaPortraitApply(keys) {
 	if (Entities.GetUnitName(Players.GetLocalPlayerPortraitUnit()) == "npc_dota_hero_brewmaster") {
 		$('#RamzaPortraitContainer').style.visibility = 'visible';
@@ -412,4 +412,4 @@ function UpdateRamzaDeath(keys) {
 GameEvents.Subscribe( "ramza_select_job", RamzaSelectJobListener);
 GameEvents.Subscribe( "ramza_select_secondary_skill", RamzaSelectSecondarySkillListener);
 GameEvents.Subscribe( "dota_player_update_selected_unit", RamzaPortraitApply);
-GameEvents.Subscribe( "dota_player_update_killcam_unit", UpdateRamzaDeath);
+GameEvents.Subscribe( "dota_player_update_killcam_unit", UpdateRamzaDeath);*/

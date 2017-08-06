@@ -168,7 +168,7 @@ function GameMode:_OnNPCSpawned(keys)
 	end
 	
 	if hHero:GetName() == "npc_dota_hero_brewmaster" then
-		RamzaInit(hHero, self)
+--		RamzaInit(hHero, self)
 	end
 	
 	LearnInnateSkillOnSpawn(hHero)
