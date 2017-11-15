@@ -96,23 +96,22 @@ function GameMode:OnGameStateChanged( keys )
 		Tutorial:StartTutorialMode()
 		local tTowers = Entities:FindAllByClassname("npc_dota_tower")
 		local iTowerPower = self.iTowerPower or 1
+		local iTowerEndure = self.iTowerEndure or 1
 		for k, v in pairs(tTowers) do
 			v:AddNewModifier(v, nil, "modifier_tower_power", {}):SetStackCount(iTowerPower)
+			v:AddNewModifier(v, nil, "modifier_tower_endure", {}):SetStackCount(iTowerEndure)
 		end
 		local tTowers = Entities:FindAllByClassname("npc_dota_barracks")
-		local iTowerPower = self.iTowerPower or 1
 		for k, v in pairs(tTowers) do
-			v:AddNewModifier(v, nil, "modifier_tower_power", {}):SetStackCount(iTowerPower)
+			v:AddNewModifier(v, nil, "modifier_tower_endure", {}):SetStackCount(iTowerEndure)
 		end
 		local tTowers = Entities:FindAllByClassname("npc_dota_healer")
-		local iTowerPower = self.iTowerPower or 1
 		for k, v in pairs(tTowers) do
-			v:AddNewModifier(v, nil, "modifier_tower_power", {}):SetStackCount(iTowerPower)
+			v:AddNewModifier(v, nil, "modifier_tower_endure", {}):SetStackCount(iTowerEndure)
 		end
 		local tTowers = Entities:FindAllByClassname("npc_dota_fort")
-		local iTowerPower = self.iTowerPower or 1
 		for k, v in pairs(tTowers) do
-			v:AddNewModifier(v, nil, "modifier_tower_power", {}):SetStackCount(iTowerPower)
+			v:AddNewModifier(v, nil, "modifier_tower_endure", {}):SetStackCount(iTowerEndure)
 		end
 	  
 --      for i=0, DOTA_MAX_TEAM_PLAYERS do`
@@ -275,6 +274,11 @@ function GameMode:_OnNPCSpawned(keys)
 		HurricaneInit(hHero, self)
 	end
 	
+	if hHero:GetName() == "npc_dota_hero_sniper" and not hHero.bSpawned then
+		require('heroes/sniper/sniper_init')
+		SniperInit(hHero, self)
+	end
+	
 	LearnInnateSkillOnSpawn(hHero)
 
 	if not hHero:IsHero() or hHero:IsIllusion() then return end	
@@ -331,6 +335,7 @@ function GameMode:OnGetLoadingSetOptions(eventSourceIndex, args)
 	self.iRespawnTimePercentage = tonumber(args.game_options.respawn_time_percentage)
 	self.iMaxLevel = tonumber(args.game_options.max_level)
 	self.iTowerPower = tonumber(args.game_options.tower_power)
+	self.iTowerEndure = tonumber(args.game_options.tower_endure)
 	self.iImbalancedEconomizer = args.game_options.imbalanced_economizer
 	self.iBotHasFunItem = args.game_options.bot_has_fun_item
 	self.iBotAttackTowerPickRune = args.game_options.bot_attack_tower_pick_rune
@@ -338,25 +343,3 @@ function GameMode:OnGetLoadingSetOptions(eventSourceIndex, args)
 	self:PreGameOptions()
 end
 
-function GameMode:OnFormlessForget(eventSourceIndex, args)	
-	local hero = PlayerResource:GetPlayer(eventSourceIndex - 1):GetAssignedHero()
-	local currentAbility = hero:GetAbilityByIndex(tonumber(args.skill_index))
-    if currentAbility:GetName() ~= args.skillname_to_forget then
-	  if currentAbility:IsChanneling() then
-		currentAbility:EndChannel(true)
-	  end
-      hero:SwapAbilities(currentAbility:GetName(), args.skillname_to_forget, false, true)
-      hero:FindAbilityByName(args.skillname_to_forget):SetLevel(currentAbility:GetLevel())
-	  local allModifiers = hero:FindAllModifiers()
-	  local modifiersToRemove = {}
-	  for i = #allModifiers, 1, -1 do
-		  if string.find(allModifiers[i]:GetName(), currentAbility:GetName()) then
-	  		table.insert(modifiersToRemove, allModifiers[i]:GetName())
-		  end
-	  end	  
-	  hero:RemoveAbility(currentAbility:GetName())
-	  for i = 1, #modifiersToRemove do
-		hero:RemoveModifierByName(modifiersToRemove[i])
-	  end
-    end
-end
